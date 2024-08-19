@@ -3,12 +3,12 @@ version: '3.8'
 services:
   app:
     build:
-      context: /Desktop/personal-projects/api-adv/
+      context: .
       dockerfile: ops/docker/Dockerfile
     volumes:
-      - /Desktop/personal-projects/api-adv/:/var/www/html
+      - .:/var/www/html
     ports:
-      - "8080:80"
+      - "81:80"
     environment:
       - APP_ENV=dev
       - DATABASE_URL=mysql://user:password@db:3306/dbname

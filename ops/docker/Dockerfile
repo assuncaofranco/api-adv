@@ -1,4 +1,3 @@
-# Usar uma imagem oficial do PHP com Apache
 FROM php:8.2-apache
 
 # Instalar extensões PHP necessárias
@@ -14,6 +13,9 @@ RUN a2enmod rewrite
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copiar a configuração personalizada do Apache para o container
+COPY ops/docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Configurar o diretório de trabalho
 WORKDIR /var/www/html

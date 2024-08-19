@@ -24,7 +24,7 @@ class TJUFController extends AbstractController
     }
 
     #[Route(
-        path: '/tj-uf',
+        path: '/apiadv/tj-uf',
         name: 'process_tjuf_list',
         requirements: ['domainId' => '\d+', 'id' => '\d+'],
         methods: ['GET']
@@ -41,7 +41,7 @@ class TJUFController extends AbstractController
     }
 
     #[Route(
-        path: '/tj-uf/{id}',
+        path: '/apiadv/tj-uf/{id}',
         name: 'process_tjuf',
         requirements: ['id' => '\d+'],
         methods: ['GET']
@@ -58,13 +58,14 @@ class TJUFController extends AbstractController
     }
 
     #[Route(
-        path: '/tj-uf/{id}',
+        path: '/apiadv/tj-uf/{id}',
         name: 'post_process_tjuf',
         requirements: ['id' => '\d+'],
         methods: ['POST']
     )]
     public function postProcessDataAction(Request $request): JsonResponse|FormInterface
     {
+        var_dump($request->request->all());
         $jsonData = json_decode($request->getContent(), true);
 
         $form = $this->createForm(TJType::class);
