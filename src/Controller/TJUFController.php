@@ -13,14 +13,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TJUFController extends AbstractController
 {
-    const API_KEY = 'APIKey cDZHYzlZa0JadVREZDJCendQbXY6SkJlTzNjLV9TRENyQk1RdnFKZGRQdw==';
-    const TJ_URL = 'https://api-publica.datajud.cnj.jus.br/api_publica_tjsp/_search';
-    
+    private string $apiKey;
+    private string $tjUrl;
     private ApiClient $apiClient;
 
-    public function __construct(ApiClient $apiClient)
+    public function __construct(ApiClient $apiClient, string $apiKey, string $tjUrl)
     {
         $this->apiClient = $apiClient;
+        $this->apiKey = $apiKey;
+        $this->tjUrl = $tjUrl;
     }
 
     #[Route(
@@ -32,7 +33,7 @@ class TJUFController extends AbstractController
     public function getProcessListAction(): JsonResponse
     {
         try {
-            $jsonData = $this->apiClient->fetchData(self::TJ_URL, self::API_KEY);
+            $jsonData = $this->apiClient->fetchData($this->tjUrl, $this->apiKey);
 
             return $this->json($jsonData);
         } catch (\Exception $e) {
@@ -49,7 +50,7 @@ class TJUFController extends AbstractController
     public function getProcessDataAction(): JsonResponse
     {
         try {
-            $jsonData = $this->apiClient->fetchData(self::TJ_URL, self::API_KEY);
+            $jsonData = $this->apiClient->fetchData($this->tjUrl, $this->apiKey);
 
             return $this->json($jsonData);
         } catch (\Exception $e) {
@@ -80,7 +81,7 @@ class TJUFController extends AbstractController
         }
 
         try {
-            $response = $this->apiClient->fetchData(self::TJ_URL, self::API_KEY);
+            $response = $this->apiClient->fetchData($this->tjUrl, $this->apiKey);
             return $this->json($response);
         } catch (\Exception $e) {
             return $this->json(['error' => $e->getMessage()], 500);
