@@ -9,7 +9,7 @@ Before you begin, ensure you have Docker and Docker Compose installed on your sy
 ### Clone the Repository
 
 ```bash
-git clone [<repository-url>](https://github.com/assuncaofranco/api-adv.git)
+git clone https://github.com/assuncaofranco/api-adv.git
 cd api-adv
 ```
 
