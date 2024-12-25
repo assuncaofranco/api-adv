@@ -9,6 +9,11 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+    
+    App\Client\ApiClient:
+        arguments:
+            $apiKey: '%api_key%'
+            $baseUrl: '%base_url%'
 
     GuzzleHttp\Client:
         class: GuzzleHttp\Client

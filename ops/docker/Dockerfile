@@ -1,37 +1,47 @@
 FROM php:8.2-apache
 
-# Instalar extensões PHP necessárias
-RUN apt-get update && apt-get install -y \
-    libicu-dev \
-    libonig-dev \
-    libzip-dev \
-    unzip \
-    && docker-php-ext-install intl mbstring pdo pdo_mysql zip
+# Copy virtual host into container
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 
-# Habilitar módulos do Apache
+# Enable rewrite mode
 RUN a2enmod rewrite
 
-# Instalar Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Install necessary packages
+RUN apt-get update && \
+    apt-get install \
+    libzip-dev \
+    wget \
+    git \
+    unzip \
+    -y --no-install-recommends
 
-# Copiar a configuração personalizada do Apache para o container
-COPY ops/docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+# Install PHP Extensions
+RUN docker-php-ext-install zip pdo_mysql
 
-# Configurar o diretório de trabalho
-WORKDIR /var/www/html
+RUN pecl install -o -f xdebug \
+    && docker-php-ext-enable xdebug
+#     && rm -rf /tmp/pear
 
-# Copiar os arquivos da aplicação
-COPY . .
+# Copy composer installable
+COPY ./install-composer.sh ./
 
-# Instalar dependências do Composer
-RUN composer install --no-scripts --no-autoloader && composer dump-autoload --optimize
+# Copy php.ini
+COPY ./php.ini /usr/local/etc/php/
 
-# Configurar permissões
-RUN chown -R www-data:www-data /var/www/html
-RUN chmod -R 755 /var/www/html
+# Cleanup packages and install composer
+RUN apt-get purge -y g++ \
+    && apt-get autoremove -y \
+    && rm -r /var/lib/apt/lists/* \
+    && rm -rf /tmp/* \
+    && sh ./install-composer.sh \
+    && rm ./install-composer.sh
 
-# Expor a porta 80
-EXPOSE 80
+# Change the current working directory
+WORKDIR /var/www
 
-# Comando para iniciar o servidor Apache
+# Change the owner of the container document root
+RUN chown -R www-data:www-data /var/www
+
+# Start Apache in foreground
 CMD ["apache2-foreground"]
+
