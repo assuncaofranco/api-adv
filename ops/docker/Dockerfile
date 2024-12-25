@@ -3,6 +3,10 @@ FROM php:8.2-apache
 # Copy virtual host into container
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 
+RUN apt-get update && \
+    apt-get install -y libzip-dev wget git unzip curl --no-install-recommends
+
+
 # Enable rewrite mode
 RUN a2enmod rewrite
 

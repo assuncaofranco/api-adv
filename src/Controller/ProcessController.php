@@ -11,9 +11,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class TJUFController extends AbstractController
-{
-    
+class ProcessController extends AbstractController
+{    
     private ApiClient $apiClient;
 
     public function __construct(ApiClient $apiClient)
@@ -22,7 +21,7 @@ class TJUFController extends AbstractController
     }
 
     #[Route(
-        path: '/apiadv/tj-uf',
+        path: '/apiadv/tj-uf/list',
         name: 'process_tjuf_list',
         methods: ['POST']
     )]
@@ -40,7 +39,7 @@ class TJUFController extends AbstractController
     }
 
     #[Route(
-        path: '/apiadv/tj-uf/{id}',
+        path: '/apiadv/tj-uf',
         name: 'process_tjuf',
         requirements: ['id' => '\d+'],
         methods: ['POST']
@@ -48,13 +47,19 @@ class TJUFController extends AbstractController
     public function getProcessByAction(Request $request): JsonResponse
     {
         try {
+            //TODO: validar request e implementar paginação https://datajud-wiki.cnj.jus.br/api-publica/exemplos/exemplo3
             $jsonData = json_decode($request->getContent(), true);
-            //TODO: validar Request
-            $response = $this->apiClient->getProcessList($jsonData['tribunal'] ?? null);
+
+            $tribunal = $jsonData['tribunal'];
+
+            $query = $jsonData;
+            unset($query['tribunal']);
+
+            $response = $this->apiClient->getProcess($tribunal, $query);
 
             return $this->json($response);
         } catch (\Exception $e) {
             return $this->json(['error' => $e->getMessage()], 500);
         }
-    }
+    }  
 }

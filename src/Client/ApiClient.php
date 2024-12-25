@@ -35,6 +35,25 @@ class ApiClient
         }
     }
 
+    public function getProcess(string $tribunal, array $query): array
+    {
+        $url = $this->prepareUrl($tribunal);
+        try {
+            $response = $this->client->request('POST', $url, [
+                'headers' => [
+                    'Authorization' => $this->apiKey
+                ],
+                'json' => $query
+            ]);
+    
+            $data = $response->getBody()->getContents();
+    
+            return json_decode($data, true);
+        } catch (\Exception $e) {
+            throw new \Exception('Erro ao buscar dados da API: ' . $e->getMessage());
+        }
+    }    
+
     private function prepareUrl(string $tribunal): string
     {
         return $this->baseUrl . $tribunal . '/_search';
