@@ -2,6 +2,12 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+    
+    app.cache.doctrine:
+        class: Symfony\Component\Cache\Adapter\ArrayAdapter
+        arguments:
+            - 3600 # Tempo de vida do cache em segundos
+            - true # Resetar o cache ao inicializar
 
     App\:
         resource: '../src/'
@@ -17,6 +23,6 @@ services:
 
     GuzzleHttp\Client:
         class: GuzzleHttp\Client
-
+    
 imports:
     - { resource: parameters.yaml }

@@ -1,3 +1,8 @@
 parameters:
     api_key: '%env(API_KEY)%'
     base_url: '%env(BASE_URL)%'
+    database_host: '%env(resolve:DATABASE_HOST)%'
+    database_port: '%env(resolve:DATABASE_PORT)%'
+    database_name: '%env(resolve:DATABASE_NAME)%'
+    database_user: '%env(resolve:DATABASE_USER)%'
+    database_password: '%env(resolve:DATABASE_PASSWORD)%'
