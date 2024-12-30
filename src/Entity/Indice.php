@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'atualizacao_monetaria')]
+#[ORM\Table(name: 'indice')]
 class Indice
 {
     #[ORM\Column(name: 'id', type: 'integer')]
