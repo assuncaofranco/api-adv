@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'atualizacao_monetaria')]
-class AtualizacaoMonetaria
+class Indice
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -16,10 +16,10 @@ class AtualizacaoMonetaria
     protected ?int $id = null;
 
     #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
-    protected string $valor;
+    protected string $indice;
 
     #[ORM\Column(type: "datetime")]
-    #[Gedmo\Timestampable(on: 'create')]  // Exemplo de uso do Gedmo
+    #[Gedmo\Timestampable(on: 'create')]
     protected DateTime $data;
 
     public function getId(): ?int
@@ -38,14 +38,14 @@ class AtualizacaoMonetaria
         return $this;
     }
 
-    public function getValor(): string
+    public function getIndice(): string
     {
-        return $this->valor;
+        return $this->indice;
     }
 
-    public function setValor(string $valor): self
+    public function setIndice(string $indice): self
     {
-        $this->valor = $valor;
+        $this->indice = str_replace(',', '.', $indice);
         return $this;
     }
 }
